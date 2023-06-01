@@ -9,21 +9,17 @@
 </script>
 
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { createSearchStore } from '$lib/stores/search';
 	import type { PageData } from './$types';
-
 	export let data: PageData;
-
-	const searchStore = createSearchStore(data.products);
-
-	let search = '';
-	$: filteredProducts = searchStore.searchHandler(search);
+	let searchTerm = '';
+	$: filteredProducts = data.products.filter((item) =>
+		item.searchTerms.toLowerCase().includes(searchTerm.toLowerCase())
+	);
 </script>
 
 <div class="container">
 	<h1>Search/Filter</h1>
-	<input type="search" placeholder="Search..." bind:value={search} />
+	<input type="search" placeholder="Search..." bind:value={searchTerm} />
 </div>
 <div class="product-grid">
 	{#each filteredProducts as product}
